@@ -1,2 +1,2 @@
 # media_playlist_shuffler
-If you have a random collection of video-media which you would like to build into randomized playlists
+If you need to spin up a quick party visualizer, either still images or videos.

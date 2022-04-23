@@ -1,8 +1,8 @@
+
+
 # Length of Playlist (in # of videos)
-PLAYLIST_LENGTH = 10
+DEFAULT_PLAYLIST_LENGTH = 5
 # Root dir of media repository
-MEDIA_ROOT = 'videos'
+MEDIA_ROOT = 'media'
 # Dir where you want playlist created
 PLAYLIST_ROOT = 'playlist'
-# Logging formatting
-PRINT_FORMAT = '||FILE||=='

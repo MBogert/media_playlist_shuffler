@@ -1,6 +1,5 @@
-videos/
+media/
 playlist/
 venv/
-conf/
 .idea/
 __pycache__/
