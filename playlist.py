@@ -8,15 +8,18 @@ import re
 
 # Builds a randomized media playlist
 # Takes a list of filepaths/dirpaths, and a tuple of user settings for the playlist
-def generate_playlist(media_list, user_input):
+def generate_playlist(media_list = []):
+    user_input = collect_playlist_settings()
+    u.print_message(u.INFO, 'Generating playlist')
     filepaths = get_filepaths(media_list, user_input)
     copy_media(filepaths)
+    u.print_message(u.INFO, 'Process complete')
+    return True
 
 # Retrieve X number of files within a specified format group
 def get_filepaths(media_list, user_input):
     filepaths = []
     supported_formats = u.return_supported_formats(user_input[0])
-
     counter = user_input[1]
     visited_file_indexes = []
     while counter > 0:
@@ -27,6 +30,7 @@ def get_filepaths(media_list, user_input):
             filepaths.append(path)
             counter -= 1
             visited_file_indexes.append(index)
+    u.print_message(u.INFO, 'Filepaths retrieved')
     return filepaths
 
 # Take existing files and copy them to a temporary playlist folder
@@ -47,6 +51,7 @@ def copy_media(playlist):
         except PermissionError as e:
             u.print_message(u.ERROR, e)
 
+# TODO Use for DELETE command
 # Removes all current files in playlist directory
 def clear_playlist():
     try:
@@ -56,3 +61,12 @@ def clear_playlist():
     finally:
         os.makedirs(u.PLAYLIST_ROOT)
         u.print_message(u.INFO, 'Initialized empty playlist directory')
+
+def collect_playlist_settings():
+    format = input('Photo or Video?')
+    u.print_message(u.INFO, 'Generating ' + format +'-list')
+    file_length = int(input('How many files?'))
+    return (format, file_length)
+
+def load_playlist(media_list = []):
+    return True

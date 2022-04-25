@@ -18,8 +18,6 @@ FILENAME_LENGTH = 32
 SUPPORTED_PHOTO_FORMATS = ['tiff', 'jpeg', 'png', 'gif', 'bmp', 'jpg']
 SUPPORTED_VIDEO_FORMATS = ['mp4', 'mov', 'wmv', 'avi', 'qt']
 
-
-
 def print_message(level, e):
     print(level + ': ' + str(e))
 

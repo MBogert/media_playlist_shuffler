@@ -7,6 +7,7 @@ import os
 
 # Clear existing playlist data and initialize media data
 def bootup_runtime():
+    # TODO remove when saved playlists is functionality
     playlist.clear_playlist()
     media_repo = bootup.build_media_repo()
     u.print_message(u.INFO, 'Bootup Complete!')
