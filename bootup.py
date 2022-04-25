@@ -1,17 +1,18 @@
 import util as u
 import bootup
-import playlist
 import os
 
 # === Miscellaneous Util. Functions === #
 
-# Clear existing playlist data and initialize media data
+# Build project structure and initialize media data
 def bootup_runtime():
-    # TODO remove when saved playlists is functionality
-    playlist.clear_playlist()
-    media_repo = bootup.build_media_repo()
-    u.print_message(u.INFO, 'Bootup Complete!')
-    return media_repo
+    if init_project() is not True:
+        u.print_message(u.INFO, 'Please add media to the appropriate directory, and re-boot the program, thank you')
+        return []
+    else:
+        media_repo = bootup.build_media_repo()
+        u.print_message(u.INFO, 'Bootup Complete!')
+        return media_repo
 
 # Returns a list of all filepaths/dirpaths in the media repo
 def build_media_repo():
@@ -32,3 +33,30 @@ def load_media_files(root):
         else:
             media_list.append(next_media)
     return media_list
+
+# Creates necessary project structure
+# Returns a bool value
+#   True => Project is fully built
+#   False => Error, or additional setup required
+def init_project():
+    # Check if media repo is loaded
+    try:
+        os.makedirs(u.MEDIA_ROOT)
+        u.print_message(u.INFO, 'Empty media repo initialized')
+        # User needs to populate media repo
+        return False
+    except FileExistsError as e:
+        u.print_message(u.INFO, 'Media repo has already been initialized')
+    # Playlist
+    try:
+        os.makedirs(u.PLAYLIST_ROOT)
+    except FileExistsError as e:
+        u.print_message(u.INFO, 'Playlist repo has already been initialized')
+    # Saved Playlists
+    try:
+        os.makedirs(u.SAVED_ROOT)
+    except FileExistsError as e:
+        u.print_message(u.INFO, 'Saved repo has already been initialized')
+    # End
+    u.print_message(u.INFO, 'Project structure initialized')
+    return True

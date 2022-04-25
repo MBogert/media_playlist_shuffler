@@ -9,6 +9,7 @@ def initiate_console_client(media_repo):
     while True:
         command = str(collect_user_command())
         status = commands[command](media_list = media_repo)
+        # False status is an exit state for the client
         if status is not True:
             return
 

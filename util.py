@@ -7,11 +7,16 @@ INFO = 'INFO'
 WARNING = 'WARN'
 ERROR = 'ERROR'
 
+# || Playlist File 'Format'|| #
+PLAYLIST_FORMAT = '.list'
+
 # || Configurable Constants || #
 # Root dir of media repository
 MEDIA_ROOT = 'media'
 # Dir where you want playlist created
 PLAYLIST_ROOT = 'playlist'
+# Saved playlist files
+SAVED_ROOT = 'saved'
 # Change this for longer/shorter filenames
 FILENAME_LENGTH = 32
 # File formats
@@ -32,8 +37,9 @@ def is_valid_format(formats, path):
         return False
 
 # Only returns alphabetical characters
-def random_filename(format):
-    return '/' + ''.join(random.choices(string.ascii_letters, k = FILENAME_LENGTH)) + format
+# Requires format specified
+def random_filename(filename):
+    return '/' + ''.join(random.choices(string.ascii_letters, k = FILENAME_LENGTH)) +  get_file_extension(filename)
 
 # Returns extension in dot-format
 def get_file_extension(filename):

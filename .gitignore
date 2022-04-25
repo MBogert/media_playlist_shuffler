@@ -1,5 +1,6 @@
 media/
 playlist/
+saved/
 venv/
 .idea/
 __pycache__/
