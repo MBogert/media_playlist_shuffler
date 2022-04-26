@@ -1,8 +1,10 @@
+import os
 import string
 import random
 import re
-
+import util as u
 # || Message Types || #
+
 INFO = 'INFO'
 WARNING = 'WARN'
 ERROR = 'ERROR'
@@ -14,7 +16,7 @@ PLAYLIST_FORMAT = '.list'
 # Root dir of media repository
 MEDIA_ROOT = 'media'
 # Dir where you want playlist created
-PLAYLIST_ROOT = 'playlist'
+PLAYLIST_ROOT = 'playlist_loaded'
 # Saved playlist files
 SAVED_ROOT = 'saved'
 # Change this for longer/shorter filenames
@@ -51,3 +53,16 @@ def return_supported_formats(format):
     elif format == 'Video':
         return SUPPORTED_VIDEO_FORMATS
     raise Exception('Invalid file format provided: ' + format)
+
+# Print out all saved playlists
+def print_saved_playlists():
+    for file in os.listdir(u.SAVED_ROOT):
+        print_file_playlist(file)
+
+# Print single playlist
+def print_file_playlist(file):
+    f = open(u.SAVED_ROOT + '\\' + file)
+    content = f.read()
+    f.close()
+    print(file)
+    print(content)

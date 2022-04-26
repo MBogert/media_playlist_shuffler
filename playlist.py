@@ -3,7 +3,6 @@ import random
 import shutil
 import util as u
 import re
-import playlist
 
 # === For handling playlist data === #
 
@@ -47,7 +46,6 @@ def copy_media(playlist):
             shutil.copy2(media, u.PLAYLIST_ROOT)
             # Randomize filenames to 'break up' adjacent media by source
             filename = re.findall(r'/[^//]*$', str(media))[-1]
-            rand = u.PLAYLIST_ROOT + u.random_filename(filename)
             os.rename(u.PLAYLIST_ROOT + filename, u.PLAYLIST_ROOT + u.random_filename(filename))
         except Exception as e:
             u.print_message(u.ERROR, e)
@@ -67,11 +65,9 @@ def collect_playlist_settings():
 
 # Clears existing playlist and loads new media from file
 def load_playlist(media_list = []):
-    # TODO Include prompt step for selecting specific playlist file
-    filename = '/pbSJEMVHavsUhwuLKVQHmPKqwdyFnLCS.list'
-    #
-    loaded_playlist = load_playlist_file(u.SAVED_ROOT + filename)
-    playlist.clear_playlist()
+    filename = select_playlist_file()
+    loaded_playlist = load_playlist_file(u.SAVED_ROOT + '\\' + filename)
+    clear_playlist()
     u.print_message(u.INFO, 'Playlist queue cleared')
     copy_media(loaded_playlist)
     u.print_message(u.INFO, 'Media successfully loaded')
@@ -89,9 +85,12 @@ def create_playlist_file(media_list):
 # Takes a playlist file (.list) and returns the data in list format
 def load_playlist_file(filename):
     file = open(filename, 'r')
-    media_data = file.read()[1:-1]
-    media_files = media_data.split(',')
+    media_data = file.read()[1:-1].replace('\'', '').split(', ')
     media_list = []
-    for div in media_files:
-        media_list.append(div[1:len(div) - 1])
+    for media in media_data:
+        media_list.append(media)
     return media_list
+
+def select_playlist_file():
+    u.print_saved_playlists()
+    return input('Enter the playlist\'s filename, which you would like to load, all saved playlists are displayed above...\n')
