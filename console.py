@@ -18,7 +18,7 @@ def initiate_console_client(media_repo):
             return
 
 def collect_user_command():
-    return input('==========================\nWhat would you like to do?\n==========================\nTo create a new playlist, enter \'NEW\'\nTo load an existing playlist, enter \'LOAD\'\nTo terminate the program, enter \'EXIT\'\n')
+    return input('==========================\nWhat would you like to do?\n==========================\nTo create a new playlist, enter \'NEW\'\nTo load an existing playlist, enter \'LOAD\'\nTo view the currently loaded playlist, enter \'VIEW\'\nTo terminate the program, enter \'EXIT\'\n')
 
 def exit_program(media_list = []):
     u.print_message(message = "Terminating Client", console = False)
@@ -28,5 +28,6 @@ def exit_program(media_list = []):
 commands = {
     "NEW": playlist.generate_playlist,
     "LOAD": playlist.load_playlist,
+    "VIEW": u.print_loaded_playlist,
     "EXIT": exit_program,
 }
