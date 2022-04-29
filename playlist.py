@@ -11,20 +11,22 @@ import re
 def generate_playlist(media_list = []):
     user_input = collect_playlist_settings()
     # Clear existing playlist data and copy new media over
-    u.print_message(u.INFO, 'Generating playlist')
+    u.print_message(message = 'Generating playlist of ' + str(user_input[1]) + ' ' + str(user_input[0]))
     filepaths = get_filepaths(media_list, user_input)
     clear_playlist()
     copy_media(filepaths)
     # Save new playlist to file, and store in 'saved' dir
-    u.print_message(u.INFO, 'Playlist generated, saving to file')
     playlist_name = str(create_playlist_file(filepaths))
-    u.print_message(u.INFO, 'Written to ' + playlist_name)
+    u.print_message(message = 'Playlist generated, saving to file: ' + playlist_name)
     return True
 
 # Retrieve X number of files within a specified format group, based on user_input
 def get_filepaths(media_list, user_input):
     filepaths = []
+    # || Ask for media formats (or short circuit on error) || #
     supported_formats = u.return_supported_formats(user_input[0])
+    if len(supported_formats) == 0:
+        return []
     counter = user_input[1]
     visited_file_indexes = []
     while counter > 0:
@@ -35,7 +37,7 @@ def get_filepaths(media_list, user_input):
             filepaths.append(path)
             counter -= 1
             visited_file_indexes.append(index)
-    u.print_message(u.INFO, 'Filepaths retrieved')
+    u.print_message(message = 'Filepaths retrieved: ' + str(filepaths), console = False)
     return filepaths
 
 # Take existing files and copy them to a temporary playlist folder
@@ -54,23 +56,23 @@ def clear_playlist():
     try:
         shutil.rmtree(u.PLAYLIST_ROOT)
         os.makedirs(u.PLAYLIST_ROOT)
+        u.print_message(message='Playlist queue cleared', console = False)
     except Exception as e:
-        u.print_message(u.WARNING, 'Could not clear previous playlist, it may have already been cleaned up')
+        u.print_message(u.WARNING, 'Could not clear previous playlist, it may have already been cleaned up', console = False)
 
 def collect_playlist_settings():
     format = input('Photo or Video?\n')
-    u.print_message(u.INFO, 'Generating ' + format +'-list')
     file_length = int(input('How many files?\n'))
     return (format, file_length)
 
 # Clears existing playlist and loads new media from file
 def load_playlist(media_list = []):
     filename = select_playlist_file()
+    u.print_message(message='Loading playlist file: ' + filename)
     loaded_playlist = load_playlist_file(u.SAVED_ROOT + '\\' + filename)
     clear_playlist()
-    u.print_message(u.INFO, 'Playlist queue cleared')
     copy_media(loaded_playlist)
-    u.print_message(u.INFO, 'Media successfully loaded')
+    u.print_message(message = 'Media successfully loaded!')
     return True
 
 # Writes playlist to file for later use, and moves to 'saved' directory

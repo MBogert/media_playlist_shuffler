@@ -1,6 +1,7 @@
-media/
-playlist_loaded/
-saved/
 venv/
 .idea/
 __pycache__/
+media/
+playlist_loaded/
+saved/
+*.log
