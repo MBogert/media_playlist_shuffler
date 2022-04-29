@@ -1,11 +1,9 @@
-import os
 import string
 import random
 import re
-import util as u
 from datetime import datetime
-# || Message Types || #
 
+# || Message Types || #
 INFO = 'INFO'
 WARNING = 'WARN'
 ERROR = 'ERROR'
@@ -40,6 +38,7 @@ def print_message(level = INFO, message = '', console = True, logging = True):
 def is_directory(name):
     return "." not in name
 
+# Checks if a given filepath contains a compatible format
 def is_valid_format(formats, path):
     path_format = path.split('.')[-1]
     if path_format in formats:
@@ -65,25 +64,4 @@ def return_supported_formats(format):
         print_message(level = WARNING, message = 'Invalid format identified: ' + format)
         return []
 
-# Print out all saved playlists
-def print_saved_playlists():
-    for file in os.listdir(SAVED_ROOT):
-        print_playlist_file(file)
 
-# Print single playlist
-def print_playlist_file(file):
-    print_message(VIEW, '===== Playlist =====', logging = False)
-    with open(SAVED_ROOT + '\\' + file, 'r') as f:
-        content = f.read()[1:-1].replace('\'', '').split(', ')
-        print_message(VIEW, 'Name: ' + f.name + '\n' + 'Files: ' + str(len(content)), logging = False)
-        for media in content:
-            print_message(VIEW, media, logging = False)
-        f.close()
-    print_message(VIEW, '==== ==== ==== ====\n', logging = False)
-    
-def print_loaded_playlist(media_list = []):
-    print_message(VIEW, '===== Current Playlist =====')
-    for file in os.listdir(PLAYLIST_ROOT):
-        print_message(VIEW, file, logging = False)
-    print_message(VIEW, '==== ==== ==== ====\n', logging = False)
-    return True

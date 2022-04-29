@@ -2,7 +2,7 @@ import util as u
 import bootup
 import os
 
-# === Miscellaneous Util. Functions === #
+# === Functions for program setup === #
 
 # Build project structure and initialize media data
 def bootup_runtime():

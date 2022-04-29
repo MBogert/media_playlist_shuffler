@@ -6,8 +6,8 @@ import re
 
 # === For handling playlist data === #
 
-# Builds a randomized media playlist
-# Takes a list of filepaths/dirpaths, and a tuple of user settings for the playlist
+# || Builds a randomized media playlist || #
+# || Takes a list of filepaths/dirpaths, and a tuple of user settings for the playlist || #
 def generate_playlist(media_list = []):
     user_input = collect_playlist_settings()
     # Clear existing playlist data and copy new media over
@@ -20,7 +20,7 @@ def generate_playlist(media_list = []):
     u.print_message(message = 'Playlist generated, saving to file: ' + playlist_name)
     return True
 
-# Retrieve X number of files within a specified format group, based on user_input
+# || Retrieve X number of files within a specified format group, based on user_input || #
 def get_filepaths(media_list, user_input):
     filepaths = []
     # || Ask for media formats (or short circuit on error) || #
@@ -40,7 +40,7 @@ def get_filepaths(media_list, user_input):
     u.print_message(message = 'Filepaths retrieved: ' + str(filepaths), console = False)
     return filepaths
 
-# Take existing files and copy them to a temporary playlist folder
+# || Take existing files and copy them to a temporary playlist folder || #
 # || WARNING: Large files or list sizes can lead to performance/memory issues || #
 def copy_media(playlist):
     for media in playlist:
@@ -65,7 +65,7 @@ def collect_playlist_settings():
     file_length = int(input('How many files?\n'))
     return (format, file_length)
 
-# Clears existing playlist and loads new media from file
+# || Clears existing playlist and loads new media from file || #
 def load_playlist(media_list = []):
     filename = select_playlist_file()
     u.print_message(message='Loading playlist file: ' + filename)
@@ -96,3 +96,30 @@ def load_playlist_file(filename):
 def select_playlist_file():
     u.print_saved_playlists()
     return input('Enter the playlist\'s filename, which you would like to load, all saved playlists are displayed above...\n')
+
+
+# Print out all saved playlists
+def print_saved_playlists():
+    for file in os.listdir(u.SAVED_ROOT):
+        print_playlist_file(file)
+
+
+# Print single playlist
+def print_playlist_file(file):
+    u.print_message(u.VIEW, '===== Playlist =====', logging=False)
+    with open(u.SAVED_ROOT + '\\' + file, 'r') as f:
+        content = f.read()[1:-1].replace('\'', '').split(', ')
+        u.print_message(u.VIEW, 'Name: ' + f.name + '\n' + 'Files: ' + str(len(content)), logging=False)
+        for media in content:
+            u.print_message(u.VIEW, media, logging=False)
+        f.close()
+    u.print_message(u.VIEW, '==== ==== ==== ====\n', logging=False)
+
+
+# Print playlist currently loaded up
+def print_loaded_playlist(media_list=[]):
+    u.print_message(level=u.VIEW, message='===== Current Playlist =====', logging=False)
+    for file in os.listdir(u.PLAYLIST_ROOT):
+        u.print_message(level=u.VIEW, message=file, logging=False)
+    u.print_message(u.VIEW, '==== ==== ==== ====\n', logging=False)
+    return True

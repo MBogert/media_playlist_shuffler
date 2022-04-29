@@ -25,6 +25,7 @@ def exit_program(media_list = []):
     return False
 
 # || Valid user commands (KEEP AT THE BOTTOM OF THE FILE) || #
+# || Methods used below must have the minimum structure (media_list = []) || #
 commands = {
     "NEW": playlist.generate_playlist,
     "LOAD": playlist.load_playlist,
