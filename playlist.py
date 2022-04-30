@@ -123,3 +123,13 @@ def print_loaded_playlist(media_list=[]):
         u.print_message(level=u.VIEW, message=file, logging=False)
     u.print_message(u.VIEW, '==== ==== ==== ====\n', logging=False)
     return True
+
+# || Runs the current playlist in `loaded_playlist` || #
+def run_current_playlist():
+    try:
+        if len(os.listdir(u.PLAYLIST_ROOT)) > 0:
+            os.startfile(os.path.normpath(u.PLAYLIST_ROOT ))
+        else:
+            u.print_message(u.WARNING, 'Media files not identified in ' + u.PLAYLIST_ROOT)
+    except FileNotFoundError as e:
+        u.print_message(level = u.ERROR, message = str(e))

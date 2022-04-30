@@ -1,6 +1,7 @@
 import bootup
 import console
 import util as u
+import os
 
 # || Runtime || #
 def run():
@@ -8,6 +9,5 @@ def run():
     media_list = bootup.bootup_runtime()
     console.initiate_console_client(media_list)
     u.print_message(message = "Have a nice day!", logging = False)
-
 # || Startup || #
 run()
