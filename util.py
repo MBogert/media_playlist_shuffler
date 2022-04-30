@@ -64,4 +64,5 @@ def return_supported_formats(format):
         print_message(level = WARNING, message = 'Invalid format identified: ' + format)
         return []
 
-
+def is_directory_empty(dir_path):
+    print()

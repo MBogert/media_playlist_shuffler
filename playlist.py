@@ -9,6 +9,9 @@ import re
 # || Builds a randomized media playlist || #
 # || Takes a list of filepaths/dirpaths, and a tuple of user settings for the playlist || #
 def generate_playlist(media_list = []):
+    if len(os.listdir(u.MEDIA_ROOT)) == 0:
+        u.print_message(level=u.INFO, message='Media directory is empty, please load appropriate media')
+        return True
     user_input = collect_playlist_settings()
     # Clear existing playlist data and copy new media over
     u.print_message(message = 'Generating playlist of ' + str(user_input[1]) + ' ' + str(user_input[0]))
@@ -70,9 +73,12 @@ def load_playlist(media_list = []):
     filename = select_playlist_file()
     u.print_message(message='Loading playlist file: ' + filename)
     loaded_playlist = load_playlist_file(u.SAVED_ROOT + '\\' + filename)
-    clear_playlist()
-    copy_media(loaded_playlist)
-    u.print_message(message = 'Media successfully loaded!')
+    if loaded_playlist != []:
+        clear_playlist()
+        copy_media(loaded_playlist)
+        u.print_message(message='Media successfully loaded!')
+    else:
+        u.print_message(message='Playlist data not found')
     return True
 
 # Writes playlist to file for later use, and moves to 'saved' directory
@@ -86,22 +92,34 @@ def create_playlist_file(media_list):
 
 # Takes a playlist file (.list) and returns the data in list format
 def load_playlist_file(filename):
-    file = open(filename, 'r')
-    media_data = file.read()[1:-1].replace('\'', '').split(', ')
-    media_list = []
-    for media in media_data:
-        media_list.append(media)
-    return media_list
+    try:
+        file = open(filename, 'r')
+        media_data = file.read()[1:-1].replace('\'', '').split(', ')
+        media_list = []
+        for media in media_data:
+            media_list.append(media)
+        return media_list
+    except FileNotFoundError as e:
+        u.print_message(level=u.ERROR, message='File not found: ' + filename)
+        return []
 
 def select_playlist_file():
-    u.print_saved_playlists()
-    return input('Enter the playlist\'s filename, which you would like to load, all saved playlists are displayed above...\n')
-
+    if print_saved_playlists() is True:
+        return input('Enter the playlist\'s filename, which you would like to load, all saved playlists are displayed above...\n')
+    else:
+        u.print_message(level=u.WARNING, message='No playlist files identified in ' + u.SAVED_ROOT)
+        return ''
 
 # Print out all saved playlists
+# Returns status whether or not files exist
 def print_saved_playlists():
-    for file in os.listdir(u.SAVED_ROOT):
-        print_playlist_file(file)
+    if len(os.listdir(u.SAVED_ROOT)) > 0:
+        for file in os.listdir(u.SAVED_ROOT):
+            print_playlist_file(file)
+        return True
+    else:
+        u.print_message(u.VIEW, message='==== ==== ====\nNo playlist files identified\n==== ==== ====', logging=False)
+        return False
 
 
 # Print single playlist
@@ -113,7 +131,7 @@ def print_playlist_file(file):
         for media in content:
             u.print_message(u.VIEW, media, logging=False)
         f.close()
-    u.print_message(u.VIEW, '==== ==== ==== ====\n', logging=False)
+    u.print_message(u.VIEW, '==== ==== ==== ==== ====\n', logging=False)
 
 
 # Print playlist currently loaded up
