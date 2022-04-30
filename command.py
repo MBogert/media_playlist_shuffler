@@ -26,7 +26,7 @@ def generate_playlist(media_list=[]):
 
 # LOAD
 def load_playlist(media_list=[]):
-    filename = p.select_playlist_file()
+    filename = c.select_playlist_file()
     u.print_message(message='Loading playlist file: ' + filename)
     loaded_playlist = p.load_playlist_file(u.SAVED_ROOT + '\\' + filename)
     if loaded_playlist:
