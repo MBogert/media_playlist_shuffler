@@ -27,7 +27,8 @@ FILENAME_LENGTH = 32
 SUPPORTED_PHOTO_FORMATS = ['tiff', 'jpeg', 'png', 'gif', 'bmp', 'jpg']
 SUPPORTED_VIDEO_FORMATS = ['mp4', 'mov', 'wmv', 'avi', 'qt']
 
-def print_message(level = INFO, message = '', console = True, logging = True):
+
+def print_message(level=INFO, message='', console=True, logging=True):
     if console is True:
         print(level + ': ' + str(message))
     if logging is True:
@@ -35,8 +36,10 @@ def print_message(level = INFO, message = '', console = True, logging = True):
             f.write('||' + str(datetime.now()) + '||: ' + level + ': ' + message + '\n')
             f.close()
 
+
 def is_directory(name):
     return "." not in name
+
 
 # Checks if a given filepath contains a compatible format
 def is_valid_format(formats, path):
@@ -46,14 +49,17 @@ def is_valid_format(formats, path):
     else:
         return False
 
+
 # Only returns alphabetical characters
 # Requires format specified
 def random_filename(filename):
-    return '/' + ''.join(random.choices(string.ascii_letters, k = FILENAME_LENGTH)) +  get_file_extension(filename)
+    return '/' + ''.join(random.choices(string.ascii_letters, k=FILENAME_LENGTH)) + get_file_extension(filename)
+
 
 # Returns extension in dot-format
 def get_file_extension(filename):
     return re.findall(r'\.[^\.]*$', str(filename))[-1]
+
 
 def return_supported_formats(format):
     if format == 'Photo':
@@ -61,8 +67,5 @@ def return_supported_formats(format):
     elif format == 'Video':
         return SUPPORTED_VIDEO_FORMATS
     else:
-        print_message(level = WARNING, message = 'Invalid format identified: ' + format)
+        print_message(level=WARNING, message='Invalid format identified: ' + format)
         return []
-
-def is_directory_empty(dir_path):
-    print()

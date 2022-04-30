@@ -1,28 +1,30 @@
 import util as u
-import bootup
 import os
+
 
 # === Functions for program setup === #
 
-# Build project structure and initialize media data
+# Build/check project structure, and load media files to data
 def bootup_runtime():
     if init_project() is not True:
-        u.print_message(message = 'Please add media to the appropriate directory, and re-boot the program, thank you', logging = False)
+        u.print_message(message='Please add media to the appropriate directory, and re-boot the program, thank you',
+                        logging=False)
         return []
     else:
-        media_repo = bootup.build_media_repo()
-        u.print_message(message = 'Bootup Complete!')
+        media_repo = build_media_data()
+        u.print_message(message='Bootup Complete!')
         return media_repo
 
+
 # Returns a list of all filepaths/dirpaths in the media repo
-def build_media_repo():
+def build_media_data():
     root = []
     for file in os.listdir(u.MEDIA_ROOT):
         root.append(u.MEDIA_ROOT + "/" + file)
     return load_media_files(root)
 
-# For use in bootup, collects all filepaths/dirpaths in media directory
-# Returned in list data-format
+
+# For use in bootup, collects all filepaths from the media root directory, and returns in list-format
 def load_media_files(root):
     media_list = []
     while len(root) != 0:
@@ -34,34 +36,32 @@ def load_media_files(root):
             media_list.append(next_media)
     return media_list
 
+
 # Creates necessary project structure
-# Returns a bool value
-#   True => Project is fully built
-#   False => Error, or additional setup required
+# Returns bool value based on init status
 def init_project():
-    # Clean log-file
+    # Log-file
     with open(u.LOG_FILE, 'a') as f:
         f.truncate(0)
-    u.print_message(message = 'Logfile initialized: ' + u.LOG_FILE, console = False)
-    # Check if media repo is loaded
+    u.print_message(message='Logfile initialized: ' + u.LOG_FILE, console=False)
+    # Media files repository
     try:
         os.makedirs(u.MEDIA_ROOT)
-        u.print_message(message = 'Empty media repo initialized', console = False)
-        # User needs to populate media repo
-        return False
+        u.print_message(message='Empty media repo initialized: ' + u.MEDIA_ROOT, console=False)
     except FileExistsError as e:
-        u.print_message(message = 'Media repo has already been initialized', console = False)
-    # Playlist
+        u.print_message(message='Media repo has already been initialized', console=False)
+    # Holding dir for loaded playlists
     try:
         os.makedirs(u.PLAYLIST_ROOT)
-        u.print_message(message = 'Empty playlist dir initialized', console = False)
+        u.print_message(message='Empty playlist repo initialized: ' + u.PLAYLIST_ROOT, console=False)
     except FileExistsError as e:
-        u.print_message(message = 'Playlist repo has already been initialized', console = False)
-    # Saved Playlists
+        u.print_message(message='Playlist repo has already been initialized', console=False)
+    # Saved playlists files repo (.list)
     try:
         os.makedirs(u.SAVED_ROOT)
+        u.print_message(message='Saved playlist repo initialized: ' + u.SAVED_ROOT, console=False)
     except FileExistsError as e:
-        u.print_message(message = 'Saved repo has already been initialized', console = False)
+        u.print_message(message='Saved playlist repo has already been initialized', console=False)
     # End
-    u.print_message(message = 'Project structure initialized', console = False)
+    u.print_message(message='Project structure initialized', console=False)
     return True
