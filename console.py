@@ -33,9 +33,9 @@ def collect_user_command():
 
 
 def select_playlist_file():
-    if p.print_saved_playlists() is True:
-        return input(
-            'Enter the playlist\'s filename, which you would like to load, all saved playlists are displayed above...\n')
+    format = input('Load Photo or Video?\n')
+    if p.print_saved_playlists('.' + format) is True:
+        return input('Enter the playlist\'s filename, which you would like to load, all saved playlists are displayed above...\n')
     else:
         u.print_message(level=u.WARNING, message='No playlist files identified in ' + u.SAVED_ROOT)
         return ''

@@ -18,8 +18,8 @@ PLAYLIST_FORMAT = '.list'
 MEDIA_ROOT = 'media'
 # Dir where you want playlist created
 PLAYLIST_ROOT = 'playlist_loaded'
-PLAYLIST_ROOT_VIDEO = '/playlist_loaded/video/'
-PLAYLIST_ROOT_PHOTO = '/playlist_loaded/photo/'
+PLAYLIST_ROOT_VIDEO = 'playlist_loaded/video/'
+PLAYLIST_ROOT_PHOTO = 'playlist_loaded/photo/'
 # Saved playlist files
 SAVED_ROOT = 'saved'
 # Log file

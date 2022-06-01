@@ -30,9 +30,17 @@ def get_filepaths(media_list, user_input):
 # || Take existing files and copy them to a temporary playlist folder || #
 # || WARNING: Large files or list sizes can lead to performance/memory issues || #
 def copy_media(playlist, format):
+    print('format')
+    print(format)
+    print('playlist')
+    print(playlist)
     path = u.PLAYLIST_ROOT_VIDEO if format == 'Video' else u.PLAYLIST_ROOT_PHOTO
+    print('path')
+    print(path)
     for media in playlist:
         try:
+            print('media')
+            print(media)
             shutil.copy2(media, path)
             # Randomize filenames to 'break up' adjacent media by source
             filename = re.findall(r'/[^//]*$', str(media))[-1]
@@ -77,6 +85,8 @@ def load_playlist_file(filename):
         media_list = []
         for media in media_data:
             media_list.append(media)
+        print(filename)
+        print(media_list)
         return media_list
     except FileNotFoundError as e:
         u.print_message(level=u.ERROR, message='File not found: ' + filename)
@@ -84,10 +94,11 @@ def load_playlist_file(filename):
 
 
 # Print out all playlists saved to file
-def print_saved_playlists():
+def print_saved_playlists(format):
     if len(os.listdir(u.SAVED_ROOT)) > 0:
         for file in os.listdir(u.SAVED_ROOT):
-            print_playlist_file(file)
+            if u.get_file_format(file) == format:
+                print_playlist_file(file)
         return True
     else:
         u.print_message(u.VIEW, message='==== ==== ====\nNo playlist files identified\n==== ==== ====', logging=False)

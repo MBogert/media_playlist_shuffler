@@ -27,11 +27,13 @@ def generate_playlist(media_list=[]):
 # LOAD
 def load_playlist(media_list=[]):
     filename = c.select_playlist_file()
+    format = u.get_file_format(filename)
     u.print_message(message='Loading playlist file: ' + filename)
     loaded_playlist = p.load_playlist_file(u.SAVED_ROOT + '\\' + filename)
+    print(loaded_playlist)
     if loaded_playlist:
-        p.clear_playlist()
-        p.copy_media(loaded_playlist)
+        p.clear_playlist(format)
+        p.copy_media(loaded_playlist, format[1:])
         u.print_message(message='Media successfully loaded!')
     else:
         u.print_message(message='Playlist data not found')
