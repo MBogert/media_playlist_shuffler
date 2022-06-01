@@ -2,6 +2,7 @@ import string
 import random
 import re
 from datetime import datetime
+import os
 
 # || Message Types || #
 INFO = 'INFO'
@@ -17,6 +18,8 @@ PLAYLIST_FORMAT = '.list'
 MEDIA_ROOT = 'media'
 # Dir where you want playlist created
 PLAYLIST_ROOT = 'playlist_loaded'
+PLAYLIST_ROOT_VIDEO = '/playlist_loaded/video/'
+PLAYLIST_ROOT_PHOTO = '/playlist_loaded/photo/'
 # Saved playlist files
 SAVED_ROOT = 'saved'
 # Log file
@@ -53,11 +56,11 @@ def is_valid_format(formats, path):
 # Only returns alphabetical characters
 # Requires format specified
 def random_filename(filename):
-    return '/' + ''.join(random.choices(string.ascii_letters, k=FILENAME_LENGTH)) + get_file_extension(filename)
+    return '/' + ''.join(random.choices(string.ascii_letters, k=FILENAME_LENGTH)) + get_file_format(filename)
 
 
 # Returns extension in dot-format
-def get_file_extension(filename):
+def get_file_format(filename):
     return re.findall(r'\.[^\.]*$', str(filename))[-1]
 
 
@@ -69,3 +72,10 @@ def return_supported_formats(format):
     else:
         print_message(level=WARNING, message='Invalid format identified: ' + format)
         return []
+
+
+def print_files_for_directory(dirpath, header='======== Playlist ========', footer='==== ==== ==== ==== ====\n'):
+    print_message(level=VIEW, message=header, logging=False)
+    for file in os.listdir(dirpath):
+        print_message(level=VIEW, message=file, logging=False)
+    print_message(level=VIEW, message=footer, logging=False)

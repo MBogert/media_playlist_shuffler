@@ -16,10 +16,10 @@ def generate_playlist(media_list=[]):
     # Clear existing playlist data and copy new media over
     u.print_message(message='Generating playlist of ' + str(user_input[1]) + ' ' + str(user_input[0]))
     filepaths = p.get_filepaths(media_list, user_input)
-    p.clear_playlist()
-    p.copy_media(filepaths)
+    p.clear_playlist(user_input[0])
+    p.copy_media(filepaths, user_input[0])
     # Save new playlist to file, and store in 'saved' dir
-    playlist_name = str(p.create_playlist_file(filepaths))
+    playlist_name = str(p.create_playlist_file(filepaths, user_input[0]))
     u.print_message(message='Playlist generated, saving to file: ' + playlist_name)
     return True
 
@@ -39,11 +39,11 @@ def load_playlist(media_list=[]):
 
 
 # VIEW
-def print_loaded_playlist(media_list=[]):
-    u.print_message(level=u.VIEW, message='===== Current Playlist =====', logging=False)
-    for file in os.listdir(u.PLAYLIST_ROOT):
-        u.print_message(level=u.VIEW, message=file, logging=False)
-    u.print_message(u.VIEW, '==== ==== ==== ==== ====\n', logging=False)
+def print_loaded_playlists(media_list=[]):
+    # Video
+    u.print_files_for_directory(u.PLAYLIST_ROOT_VIDEO)
+    # Photo
+    u.print_files_for_directory(u.PLAYLIST_ROOT_PHOTO)
     return True
 
 
@@ -51,3 +51,16 @@ def print_loaded_playlist(media_list=[]):
 def exit_program(media_list=[]):
     u.print_message(message="Terminating Client", console=False)
     return False
+
+# RUN
+def run_loaded_playlist(media_list=[]):
+    format = input('Load Photo or Video?\n')
+    try:
+        dir = u.PLAYLIST_ROOT_VIDEO if format == 'Video' else u.PLAYLIST_ROOT_PHOTO
+        if len(os.listdir(dir)) > 0:
+            os.startfile(os.path.normpath(dir))
+        else:
+            u.print_message(u.WARNING, 'Media files not identified in ' + dir)
+    except FileNotFoundError as e:
+        u.print_message(level=u.ERROR, message=str(e))
+    return True

@@ -29,32 +29,40 @@ def get_filepaths(media_list, user_input):
 
 # || Take existing files and copy them to a temporary playlist folder || #
 # || WARNING: Large files or list sizes can lead to performance/memory issues || #
-def copy_media(playlist):
+def copy_media(playlist, format):
+    path = u.PLAYLIST_ROOT_VIDEO if format == 'Video' else u.PLAYLIST_ROOT_PHOTO
     for media in playlist:
         try:
-            shutil.copy2(media, u.PLAYLIST_ROOT)
+            shutil.copy2(media, path)
             # Randomize filenames to 'break up' adjacent media by source
             filename = re.findall(r'/[^//]*$', str(media))[-1]
-            os.rename(u.PLAYLIST_ROOT + filename, u.PLAYLIST_ROOT + u.random_filename(filename))
+            os.rename(path + filename, path + u.random_filename(filename))
         except Exception as e:
             u.print_message(u.ERROR, e)
 
 
 # Removes existing media in playlist repo
-def clear_playlist():
-    try:
-        shutil.rmtree(u.PLAYLIST_ROOT)
-        os.makedirs(u.PLAYLIST_ROOT)
-        u.print_message(message='Playlist queue cleared', console=False)
-    except Exception as e:
-        u.print_message(u.WARNING, 'Could not clear previous playlist, it may have already been cleaned up',
-                        console=False)
+def clear_playlist(format):
+    if format == 'Photo':
+        try:
+            shutil.rmtree(u.PLAYLIST_ROOT_PHOTO)
+            os.makedirs(u.PLAYLIST_ROOT_PHOTO)
+            u.print_message(message='Photo queue cleared', console=False)
+        except Exception as e:
+            print('Error in clearing photo dir')
+    if format == 'Video':
+        try:
+            shutil.rmtree(u.PLAYLIST_ROOT_VIDEO)
+            os.makedirs(u.PLAYLIST_ROOT_VIDEO)
+            u.print_message(message='Video queue cleared', console=False)
+        except Exception as e:
+            print('Error in clearing video dir')
 
 
 # Writes playlist to file for later use, and moves to 'saved' directory
 # Non-zero (but miniscule) chance of duplicate filenames
-def create_playlist_file(media_list):
-    file = open(u.random_filename('file.list')[1:], 'w')
+def create_playlist_file(media_list, format):
+    file = open(u.random_filename('.' + format)[1:], 'w')
     file.write(str(media_list))
     file.close()
     shutil.move(file.name, u.SAVED_ROOT + '/' + file.name)
@@ -99,11 +107,13 @@ def print_playlist_file(file):
 
 
 # || Runs the current playlist in `loaded_playlist` || #
-def run_current_playlist():
+def run_loaded_playlist():
+    format = input('Load Photo or Video?\n')
     try:
-        if len(os.listdir(u.PLAYLIST_ROOT)) > 0:
-            os.startfile(os.path.normpath(u.PLAYLIST_ROOT))
+        dir = u.PLAYLIST_ROOT_VIDEO if format == 'Video' else u.PLAYLIST_ROOT_PHOTO
+        if len(os.listdir(dir)) > 0:
+            os.startfile(os.path.normpath(dir))
         else:
-            u.print_message(u.WARNING, 'Media files not identified in ' + u.PLAYLIST_ROOT)
+            u.print_message(u.WARNING, 'Media files not identified in ' + dir)
     except FileNotFoundError as e:
         u.print_message(level=u.ERROR, message=str(e))

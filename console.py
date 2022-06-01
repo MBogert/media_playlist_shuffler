@@ -18,12 +18,9 @@ def initiate_console_client(media_repo):
         # False status is an exit state for the client
         if status is not True:
             return
-        else:
-            # Check if user wants to run the currently loaded playlist
-            if confirm_playlist_run() is True:
-                p.run_current_playlist()
 
-
+# Return format
+# (file_format, num_files_in_playlist)
 def collect_playlist_settings():
     format = input('Photo or Video?\n')
     file_length = int(input('How many files?\n'))
@@ -32,12 +29,7 @@ def collect_playlist_settings():
 
 def collect_user_command():
     return input(
-        '==========================\nWhat would you like to do?\n==========================\nTo create a new playlist, enter \'NEW\'\nTo load an existing playlist, enter \'LOAD\'\nTo view the currently loaded playlist, enter \'VIEW\'\nTo terminate the program, enter \'EXIT\'\n')
-
-
-def confirm_playlist_run():
-    confirm_run = input('Would you like to run the currently loaded playlist?(Y/N)')
-    return True if confirm_run == 'Y' else False
+        '==========================\nWhat would you like to do?\n==========================\nTo run a loaded playlist, enter \'RUN\'\nTo create a new playlist, enter \'NEW\'\nTo load a playlist file, enter \'LOAD\'\nTo view the files loaded to playlist, enter \'VIEW\'\nTo terminate the program, enter \'EXIT\'\n')
 
 
 def select_playlist_file():
@@ -52,8 +44,9 @@ def select_playlist_file():
 # || Valid user commands (KEEP AT THE BOTTOM OF THE FILE) || #
 # || Methods used below must have the minimum structure (media_list = []) || #
 commands = {
+    "RUN": c.run_loaded_playlist,
     "NEW": c.generate_playlist,
     "LOAD": c.load_playlist,
-    "VIEW": c.print_loaded_playlist,
+    "VIEW": c.print_loaded_playlists,
     "EXIT": c.exit_program,
 }

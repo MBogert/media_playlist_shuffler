@@ -53,9 +53,21 @@ def init_project():
     # Holding dir for loaded playlists
     try:
         os.makedirs(u.PLAYLIST_ROOT)
-        u.print_message(message='Empty playlist repo initialized: ' + u.PLAYLIST_ROOT, console=False)
+        u.print_message(message='Playlist root: ' + u.PLAYLIST_ROOT, console=False)
     except FileExistsError as e:
         u.print_message(message='Playlist repo has already been initialized', console=False)
+    # Photo
+    try:
+        os.makedirs(u.PLAYLIST_ROOT_PHOTO)
+        u.print_message(message='Playlist photo root: ' + u.PLAYLIST_ROOT_PHOTO, console=False)
+    except FileExistsError as e:
+        u.print_message(message='Photo playlist repo has already been initialized', console=False)
+    # Video
+    try:
+        os.makedirs(u.PLAYLIST_ROOT_VIDEO)
+        u.print_message(message='Playlist video root: ' + u.PLAYLIST_ROOT_VIDEO, console=False)
+    except FileExistsError as e:
+        u.print_message(message='Video playlist repo has already been initialized', console=False)
     # Saved playlists files repo (.list)
     try:
         os.makedirs(u.SAVED_ROOT)
