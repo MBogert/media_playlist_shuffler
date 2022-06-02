@@ -1,6 +1,6 @@
 # Setup Guide
-1. Confirm you have Python installed, this can be checked by running `python3` in your console.
-2. Run the program for the first time: `python3 run.py` <br>This will bootup the project. 
+1. Confirm you have Python installed, running `python` or `python3`
+2. Run the program for the first time: `python run.py` <br>This will initialize needed project structure
 3. Populate the `media` directory with all of the photos and videos you would like to use. You can now generate playlists, and view them in `playlist_loaded`.
 <br><em>(Your media player will need the ability to autoplay videos and do photo slideshow for the respective media)</em>
 # Use Case
