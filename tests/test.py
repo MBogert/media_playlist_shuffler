@@ -2,10 +2,25 @@ import unittest
 import util as u
 import playlist
 import re
+import os
 
 
 # To Test
 # python -m unittest test.py
+
+def setUpModule():
+    try:
+        os.makedirs(u.LOGS_ROOT)
+    except FileExistsError as e:
+        u.print_message(message='Log repo has already been initialized', console=False)
+    # Log-file
+    try:
+        with open(u.LOG_FILE, 'a') as f:
+            f.truncate(0)
+        u.print_message(message='Logfile initialized: ' + u.LOG_FILE, console=False)
+    except {IOError, FileNotFoundError} as e:
+        u.print_message(message="Issue initializing logfile", logging=False)
+
 
 # || util.py || #
 
