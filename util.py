@@ -52,6 +52,8 @@ def is_directory(name):
 
 # Checks if a given filepath contains a compatible format
 def is_valid_format(formats, path):
+    if '.' not in path:
+        return False
     path_format = path.split('.')[-1]
     if path_format in formats:
         return True
@@ -67,7 +69,7 @@ def random_filename(filename):
 
 # Returns extension in dot-format
 def get_file_format(filename):
-    return re.findall(r'\.[^\.]*$', str(filename))[-1]
+    return '' if '.' not in filename else re.findall(r'\.[^\.]*$', str(filename))[-1]
 
 
 def return_supported_formats(file_format):
