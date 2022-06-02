@@ -10,8 +10,9 @@ WARNING = 'WARN'
 ERROR = 'ERROR'
 VIEW = 'VIEW'
 
-# || Playlist File 'Format'|| #
-PLAYLIST_FORMAT = '.list'
+# || Custom File Types || #
+PHOTO_FORMAT = '.Photo'
+VIDEO_FORMAT = '.Video'
 
 # || Configurable Constants || #
 # Root dir of media repository
@@ -26,9 +27,14 @@ SAVED_ROOT = 'saved'
 LOG_FILE = 'log_file.log'
 # Change this for longer/shorter filenames
 FILENAME_LENGTH = 32
+
 # File formats
 SUPPORTED_PHOTO_FORMATS = ['tiff', 'jpeg', 'png', 'gif', 'bmp', 'jpg']
 SUPPORTED_VIDEO_FORMATS = ['mp4', 'mov', 'wmv', 'avi', 'qt']
+
+# Index Variables for playlist settings tuple (see console.py -> collect_playlist_settings())
+SETTINGS_INDEX_FORMAT = 0
+SETTINGS_INDEX_LENGTH = 1
 
 
 def print_message(level=INFO, message='', console=True, logging=True):
@@ -64,17 +70,17 @@ def get_file_format(filename):
     return re.findall(r'\.[^\.]*$', str(filename))[-1]
 
 
-def return_supported_formats(format):
-    if format == 'Photo':
+def return_supported_formats(file_format):
+    if file_format == PHOTO_FORMAT:
         return SUPPORTED_PHOTO_FORMATS
-    elif format == 'Video':
+    elif file_format == VIDEO_FORMAT:
         return SUPPORTED_VIDEO_FORMATS
     else:
-        print_message(level=WARNING, message='Invalid format identified: ' + format)
+        print_message(level=WARNING, message='Invalid format identified: ' + file_format)
         return []
 
 
-def print_files_for_directory(dirpath, header='======== Playlist ========', footer='==== ==== ==== ==== ====\n'):
+def print_files_for_directory(dirpath, header='======== Playlist ========', footer=' === === ===   === === ===\n'):
     print_message(level=VIEW, message=header, logging=False)
     for file in os.listdir(dirpath):
         print_message(level=VIEW, message=file, logging=False)

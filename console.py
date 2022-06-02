@@ -21,10 +21,11 @@ def initiate_console_client(media_repo):
 
 # Return format
 # (file_format, num_files_in_playlist)
+# Indexes for values are stored in util.py
 def collect_playlist_settings():
     format = input('Photo or Video?\n')
     file_length = int(input('How many files?\n'))
-    return (format, file_length)
+    return ('.' + format, file_length)
 
 
 def collect_user_command():
@@ -33,8 +34,8 @@ def collect_user_command():
 
 
 def select_playlist_file():
-    format = input('Load Photo or Video?\n')
-    if p.print_saved_playlists('.' + format) is True:
+    file_format = '.' + input('Load Photo or Video?\n')
+    if p.print_saved_playlists(file_format) is True:
         return input('Enter the playlist\'s filename, which you would like to load, all saved playlists are displayed above...\n')
     else:
         u.print_message(level=u.WARNING, message='No playlist files identified in ' + u.SAVED_ROOT)

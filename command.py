@@ -13,13 +13,13 @@ def generate_playlist(media_list=[]):
         u.print_message(level=u.INFO, message='Media directory is empty, please load appropriate media')
         return True
     user_input = c.collect_playlist_settings()
-    # Clear existing playlist data and copy new media over
-    u.print_message(message='Generating playlist of ' + str(user_input[1]) + ' ' + str(user_input[0]))
+    # Clear existing playlist data and load new media
+    u.print_message(message='Generating playlist of ' + str(user_input[u.SETTINGS_INDEX_LENGTH]) + ' ' + str(user_input[u.SETTINGS_INDEX_FORMAT]))
     filepaths = p.get_filepaths(media_list, user_input)
-    p.clear_playlist(user_input[0])
-    p.copy_media(filepaths, user_input[0])
+    p.clear_playlist(user_input[u.SETTINGS_INDEX_FORMAT])
+    p.copy_media(filepaths, user_input[u.SETTINGS_INDEX_FORMAT])
     # Save new playlist to file, and store in 'saved' dir
-    playlist_name = str(p.create_playlist_file(filepaths, user_input[0]))
+    playlist_name = str(p.create_playlist_file(filepaths, user_input[u.SETTINGS_INDEX_FORMAT]))
     u.print_message(message='Playlist generated, saving to file: ' + playlist_name)
     return True
 
@@ -27,13 +27,12 @@ def generate_playlist(media_list=[]):
 # LOAD
 def load_playlist(media_list=[]):
     filename = c.select_playlist_file()
-    format = u.get_file_format(filename)
+    file_format = u.get_file_format(filename)
     u.print_message(message='Loading playlist file: ' + filename)
     loaded_playlist = p.load_playlist_file(u.SAVED_ROOT + '\\' + filename)
-    print(loaded_playlist)
     if loaded_playlist:
-        p.clear_playlist(format)
-        p.copy_media(loaded_playlist, format[1:])
+        p.clear_playlist(file_format)
+        p.copy_media(loaded_playlist, file_format)
         u.print_message(message='Media successfully loaded!')
     else:
         u.print_message(message='Playlist data not found')
@@ -43,8 +42,10 @@ def load_playlist(media_list=[]):
 # VIEW
 def print_loaded_playlists(media_list=[]):
     # Video
+    u.print_message(level=u.VIEW, message='========  .Video  ========', logging=False)
     u.print_files_for_directory(u.PLAYLIST_ROOT_VIDEO)
     # Photo
+    u.print_message(level=u.VIEW, message='========  .Photo  ========', logging=False)
     u.print_files_for_directory(u.PLAYLIST_ROOT_PHOTO)
     return True
 
@@ -56,9 +57,9 @@ def exit_program(media_list=[]):
 
 # RUN
 def run_loaded_playlist(media_list=[]):
-    format = input('Load Photo or Video?\n')
+    file_format = input('Load Photo or Video?\n')
     try:
-        dir = u.PLAYLIST_ROOT_VIDEO if format == 'Video' else u.PLAYLIST_ROOT_PHOTO
+        dir = u.PLAYLIST_ROOT_VIDEO if file_format == 'Video' else u.PLAYLIST_ROOT_PHOTO
         if len(os.listdir(dir)) > 0:
             os.startfile(os.path.normpath(dir))
         else:

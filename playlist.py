@@ -10,10 +10,10 @@ import re
 # || Retrieve random media based on user input (file_type, num_files) || #
 def get_filepaths(media_list, user_input):
     filepaths = []
-    supported_formats = u.return_supported_formats(user_input[0])
+    supported_formats = u.return_supported_formats(user_input[u.SETTINGS_INDEX_FORMAT])
     if len(supported_formats) == 0:
         return []
-    counter = user_input[1]
+    counter = user_input[u.SETTINGS_INDEX_LENGTH]
     visited_file_indexes = []
     while counter > 0:
         # || Retrieve a random file and check if it's a valid format || #
@@ -29,18 +29,10 @@ def get_filepaths(media_list, user_input):
 
 # || Take existing files and copy them to a temporary playlist folder || #
 # || WARNING: Large files or list sizes can lead to performance/memory issues || #
-def copy_media(playlist, format):
-    print('format')
-    print(format)
-    print('playlist')
-    print(playlist)
-    path = u.PLAYLIST_ROOT_VIDEO if format == 'Video' else u.PLAYLIST_ROOT_PHOTO
-    print('path')
-    print(path)
+def copy_media(playlist, file_format):
+    path = u.PLAYLIST_ROOT_VIDEO if file_format == u.VIDEO_FORMAT else u.PLAYLIST_ROOT_PHOTO
     for media in playlist:
         try:
-            print('media')
-            print(media)
             shutil.copy2(media, path)
             # Randomize filenames to 'break up' adjacent media by source
             filename = re.findall(r'/[^//]*$', str(media))[-1]
@@ -49,35 +41,35 @@ def copy_media(playlist, format):
             u.print_message(u.ERROR, e)
 
 
-# Removes existing media in playlist repo
-def clear_playlist(format):
-    if format == 'Photo':
+# Removes all media from its respective playlist repo
+def clear_playlist(file_format):
+    if file_format == u.PHOTO_FORMAT:
         try:
             shutil.rmtree(u.PLAYLIST_ROOT_PHOTO)
             os.makedirs(u.PLAYLIST_ROOT_PHOTO)
             u.print_message(message='Photo queue cleared', console=False)
         except Exception as e:
-            print('Error in clearing photo dir')
-    if format == 'Video':
+            u.print_message(level=u.WARNING, message='Error in clearing photo dir')
+    if file_format == u.VIDEO_FORMAT:
         try:
             shutil.rmtree(u.PLAYLIST_ROOT_VIDEO)
             os.makedirs(u.PLAYLIST_ROOT_VIDEO)
             u.print_message(message='Video queue cleared', console=False)
         except Exception as e:
-            print('Error in clearing video dir')
+            u.print_message(level=u.WARNING, message='Error in clearing video dir')
 
 
 # Writes playlist to file for later use, and moves to 'saved' directory
 # Non-zero (but miniscule) chance of duplicate filenames
-def create_playlist_file(media_list, format):
-    file = open(u.random_filename('.' + format)[1:], 'w')
+def create_playlist_file(media_list, file_format):
+    file = open(u.random_filename(file_format)[1:], 'w')
     file.write(str(media_list))
     file.close()
     shutil.move(file.name, u.SAVED_ROOT + '/' + file.name)
     return file.name
 
 
-# Takes a playlist file (.list) and returns the data in list format
+# Takes a playlist file and returns the media data in list format
 def load_playlist_file(filename):
     try:
         file = open(filename, 'r')
@@ -85,8 +77,6 @@ def load_playlist_file(filename):
         media_list = []
         for media in media_data:
             media_list.append(media)
-        print(filename)
-        print(media_list)
         return media_list
     except FileNotFoundError as e:
         u.print_message(level=u.ERROR, message='File not found: ' + filename)
@@ -94,10 +84,12 @@ def load_playlist_file(filename):
 
 
 # Print out all playlists saved to file
-def print_saved_playlists(format):
+def print_saved_playlists(file_format):
+    print(file_format)
     if len(os.listdir(u.SAVED_ROOT)) > 0:
         for file in os.listdir(u.SAVED_ROOT):
-            if u.get_file_format(file) == format:
+            print(file)
+            if u.get_file_format(file) == file_format:
                 print_playlist_file(file)
         return True
     else:
@@ -117,7 +109,7 @@ def print_playlist_file(file):
     u.print_message(u.VIEW, '==== ==== ==== ==== ====\n', logging=False)
 
 
-# || Runs the current playlist in `loaded_playlist` || #
+# Runs the current playlist in `loaded_playlist`
 def run_loaded_playlist():
     format = input('Load Photo or Video?\n')
     try:
