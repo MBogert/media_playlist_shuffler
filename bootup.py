@@ -40,10 +40,18 @@ def load_media_files(root):
 # Creates necessary project structure
 # Returns bool value based on init status
 def init_project():
+    # Logs dir
+    try:
+        os.makedirs(u.LOGS_ROOT)
+    except FileExistsError as e:
+        u.print_message(message='Log repo has already been initialized', console=False)
     # Log-file
-    with open(u.LOG_FILE, 'a') as f:
-        f.truncate(0)
-    u.print_message(message='Logfile initialized: ' + u.LOG_FILE, console=False)
+    try:
+        with open(u.LOG_FILE, 'a') as f:
+            f.truncate(0)
+        u.print_message(message='Logfile initialized: ' + u.LOG_FILE, console=False)
+    except {IOError, FileNotFoundError} as e:
+        u.print_message(message="Issue initializing logfile", logging=False)
     # Media files repository
     try:
         os.makedirs(u.MEDIA_ROOT)

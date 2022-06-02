@@ -4,4 +4,4 @@ __pycache__/
 media/
 playlist_loaded/
 saved/
-*.log
+logs/

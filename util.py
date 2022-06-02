@@ -24,7 +24,8 @@ PLAYLIST_ROOT_PHOTO = 'playlist_loaded/photo/'
 # Saved playlist files
 SAVED_ROOT = 'saved'
 # Log file
-LOG_FILE = 'log_file.log'
+LOGS_ROOT = 'logs/'
+LOG_FILE = LOGS_ROOT + 'log_file.log'
 # Change this for longer/shorter filenames
 FILENAME_LENGTH = 32
 
