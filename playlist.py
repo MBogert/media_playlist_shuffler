@@ -3,6 +3,7 @@ import random
 import shutil
 import util as u
 import re
+import time
 
 
 # === For handling playlist data === #
@@ -31,6 +32,7 @@ def get_filepaths(media_list, user_input):
 # || WARNING: Large files or list sizes can lead to performance/memory issues || #
 def copy_media(playlist, file_format):
     path = u.PLAYLIST_ROOT_VIDEO if file_format == u.VIDEO_FORMAT else u.PLAYLIST_ROOT_PHOTO
+    start = time.perf_counter()
     for media in playlist:
         try:
             shutil.copy2(media, path)
@@ -39,7 +41,8 @@ def copy_media(playlist, file_format):
             os.rename(path + filename, path + u.random_filename(filename))
         except Exception as e:
             u.print_message(u.ERROR, e)
-
+    end = time.perf_counter()
+    u.print_message(message='Creation Runtime: ' + str(end - start) + ' seconds', console=False)
 
 # Removes all media from its respective playlist repo
 def clear_playlist(file_format):
