@@ -30,7 +30,7 @@ def collect_playlist_settings():
 
 def collect_user_command():
     return input(
-        '==========================\nWhat would you like to do?\n==========================\nTo run a loaded playlist, enter \'RUN\'\nTo create a new playlist, enter \'NEW\'\nTo load a playlist file, enter \'LOAD\'\nTo view the files loaded to playlist, enter \'VIEW\'\nTo terminate the program, enter \'EXIT\'\n')
+        '==========================\nWhat would you like to do?\n==========================\nTo run a loaded playlist, enter \'RUN\'\nTo create a new playlist, enter \'NEW\'\nTo load a playlist file, enter \'LOAD\'\nTo view the files loaded to playlist, enter \'VIEW\'\nTo load a random video file, enter \'RND\'\nTo terminate the program, enter \'EXIT\'\n')
 
 
 def select_playlist_file():
@@ -49,5 +49,6 @@ commands = {
     "NEW": c.generate_playlist,
     "LOAD": c.load_playlist,
     "VIEW": c.print_loaded_playlists,
+    "RND": c.run_random_media,
     "EXIT": c.exit_program,
 }
