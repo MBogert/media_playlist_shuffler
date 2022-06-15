@@ -2,7 +2,7 @@ import util as u
 import playlist as p
 import os
 import console as c
-
+import random as r
 
 # || Holds the method calls useds in console.py, under 'commands' || #
 # || All methods must take at least 1 list-parm named 'media_list' ||#
@@ -64,6 +64,20 @@ def run_loaded_playlist(media_list=[]):
             os.startfile(os.path.normpath(dir))
         else:
             u.print_message(u.WARNING, 'Media files not identified in ' + dir)
+    except FileNotFoundError as e:
+        u.print_message(level=u.ERROR, message=str(e))
+    return True
+
+# RND (Load random file w/o generating a playlist)
+def run_random_media(media_list=[]):
+    file=''
+    while True: # Randomly iterate through media util an appropriate file is found
+        file = media_list[r.randint(0, len(media_list))]
+        if u.is_valid_format(u.return_supported_formats(u.VIDEO_FORMAT), file):
+            break
+    try:
+        os.startfile(os.path.normpath(file))
+        u.print_message(level=u.INFO, message='Loading random media: ' + file, console=False)
     except FileNotFoundError as e:
         u.print_message(level=u.ERROR, message=str(e))
     return True
