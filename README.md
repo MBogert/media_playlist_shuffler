@@ -11,3 +11,7 @@ We've all had that extremely specific situation in life:
 - You work in an open-concept office with team dashboard monitors, and you hijacked the system to instead put on a slideshow album of your Silver Arowana farm. 
 
 There's just so many situations where you need to have some random playlist of media. This makes things a little easier for you. Just provide the media you'd like to use, and then you can generate playlists on the fly! If there's one you particularly liked, you can re-load it for use! Just view your saved playlists in `saved`.
+
+# To-Do List
+-  Enable .mp3 support
+-  Create playlist w/o copying media (performance/local-memory issues)
