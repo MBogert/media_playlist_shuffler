@@ -18,6 +18,7 @@ VIDEO_FORMAT = '.Video'
 # || Configurable Constants || #
 # Root dir of media repository
 MEDIA_ROOT = 'media'
+MEDIA_LIB = 'lib_file'
 # Dir where you want playlist created
 PLAYLIST_ROOT = 'playlist_loaded'
 PLAYLIST_ROOT_VIDEO = 'playlist_loaded/video/'

@@ -5,5 +5,5 @@ media/
 playlist_loaded/
 saved/
 logs/
-*.lib
+lib_file
 *.log

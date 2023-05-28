@@ -12,17 +12,29 @@ def bootup_runtime():
         u.print_message(message='Media directory empty, exiting program, goodbye')
         quit()
     else:
-        media_repo = build_media_data()
-        u.print_message(message='Bootup Complete!')
-        return media_repo
+        return build_media_data()
 
 
 # Returns a list of all filepaths/dirpaths in the media repo
 def build_media_data():
+    # Check if a file is already loaded
     root = []
-    for file in os.listdir(u.MEDIA_ROOT):
-        root.append(u.MEDIA_ROOT + "/" + file)
+    with open(u.MEDIA_LIB, "r+") as f:
+        if len(f.readlines()) > 0:
+            if input('File loaded, use it? (if media library has been modified, update recommended)') == 'n':
+                for file in os.listdir(u.MEDIA_ROOT):
+                    f.truncate(0)
+                    root.append(u.MEDIA_ROOT + "/" + file)
+                    f.write(u.MEDIA_ROOT + "/" + file + '\n')
+            else:
+                root = f.readlines()
+        else:
+            for file in os.listdir(u.MEDIA_ROOT):
+                root.append(u.MEDIA_ROOT + "/" + file)
+                f.write(u.MEDIA_ROOT + "/" + file + '\n')
+        f.close()
     return load_media_files(root)
+
 
 
 # For use in bootup, collects all filepaths from the media root directory, and returns in list-format
@@ -43,7 +55,7 @@ def init_project():
     # Create project structure for runtime
     # Logfile (archive previous log)
     u.create_directory(u.LOGS_ROOT)
-    shutil.copy2(u.LOG_FILE, u.random_filename() + '.log')
+    shutil.copy2(u.LOG_FILE, u.random_filename(u.LOG_FILE)[1:])
     u.create_file(filename=u.LOG_FILE, overwrite=True)
     # Loaded playlists
     u.create_directory(u.PLAYLIST_ROOT)
