@@ -1,15 +1,16 @@
 import util as u
 import os
-
+import shutil
+from datetime import datetime
 
 # === Functions for program setup === #
 
 # Build/check project structure, and load media files to data
 def bootup_runtime():
-    if init_project() is not True:
-        u.print_message(message='Please add media to the appropriate directory, and re-boot the program, thank you',
-                        logging=False)
-        return []
+    init_project()
+    if len(os.listdir(u.MEDIA_ROOT)) == 0:
+        u.print_message(message='Media directory empty, exiting program, goodbye')
+        quit()
     else:
         media_repo = build_media_data()
         u.print_message(message='Bootup Complete!')
@@ -38,50 +39,20 @@ def load_media_files(root):
 
 
 # Creates necessary project structure
-# Returns bool value based on init status
 def init_project():
-    # Logs dir
-    try:
-        os.makedirs(u.LOGS_ROOT)
-    except FileExistsError as e:
-        u.print_message(message='Log repo has already been initialized', console=False)
-    # Log-file
-    try:
-        with open(u.LOG_FILE, 'a') as f:
-            f.truncate(0)
-        u.print_message(message='Logfile initialized: ' + u.LOG_FILE, console=False)
-    except {IOError, FileNotFoundError} as e:
-        u.print_message(message="Issue initializing logfile", logging=False)
-    # Media files repository
-    try:
-        os.makedirs(u.MEDIA_ROOT)
-        u.print_message(message='Empty media repo initialized: ' + u.MEDIA_ROOT, console=False)
-    except FileExistsError as e:
-        u.print_message(message='Media repo has already been initialized', console=False)
-    # Holding dir for loaded playlists
-    try:
-        os.makedirs(u.PLAYLIST_ROOT)
-        u.print_message(message='Playlist root: ' + u.PLAYLIST_ROOT, console=False)
-    except FileExistsError as e:
-        u.print_message(message='Playlist repo has already been initialized', console=False)
-    # Photo
-    try:
-        os.makedirs(u.PLAYLIST_ROOT_PHOTO)
-        u.print_message(message='Playlist photo root: ' + u.PLAYLIST_ROOT_PHOTO, console=False)
-    except FileExistsError as e:
-        u.print_message(message='Photo playlist repo has already been initialized', console=False)
-    # Video
-    try:
-        os.makedirs(u.PLAYLIST_ROOT_VIDEO)
-        u.print_message(message='Playlist video root: ' + u.PLAYLIST_ROOT_VIDEO, console=False)
-    except FileExistsError as e:
-        u.print_message(message='Video playlist repo has already been initialized', console=False)
-    # Saved playlists files repo (.list)
-    try:
-        os.makedirs(u.SAVED_ROOT)
-        u.print_message(message='Saved playlist repo initialized: ' + u.SAVED_ROOT, console=False)
-    except FileExistsError as e:
-        u.print_message(message='Saved playlist repo has already been initialized', console=False)
+    # Create project structure for runtime
+    # Logfile (archive previous log)
+    u.create_directory(u.LOGS_ROOT)
+    shutil.copy2(u.LOG_FILE, u.random_filename() + '.log')
+    u.create_file(filename=u.LOG_FILE, overwrite=True)
+    # Loaded playlists
+    u.create_directory(u.PLAYLIST_ROOT)
+    u.create_directory(u.PLAYLIST_ROOT_PHOTO)
+    u.create_directory(u.PLAYLIST_ROOT_VIDEO)
+    # Saved playlist files
+    u.create_directory(u.SAVED_ROOT)
+    # Media playlist
+    u.create_directory(u.MEDIA_ROOT)
     # End
     u.print_message(message='Project structure initialized', console=False)
     return True

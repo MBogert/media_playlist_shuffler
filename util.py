@@ -3,6 +3,7 @@ import random
 import re
 from datetime import datetime
 import os
+import shutil
 
 # || Message Types || #
 INFO = 'INFO'
@@ -25,7 +26,7 @@ PLAYLIST_ROOT_PHOTO = 'playlist_loaded/photo/'
 SAVED_ROOT = 'saved'
 # Log file
 LOGS_ROOT = 'logs/'
-LOG_FILE = LOGS_ROOT + 'log_file.log'
+LOG_FILE = 'log_file.log'
 # Change this for longer/shorter filenames
 FILENAME_LENGTH = 32
 
@@ -88,3 +89,23 @@ def print_files_for_directory(dirpath, header='======== Playlist ========', foot
     for file in os.listdir(dirpath):
         print_message(level=VIEW, message=file, logging=False)
     print_message(level=VIEW, message=footer, logging=False)
+
+# Create a directory
+def create_directory(dirpath):
+    try:
+        os.makedirs(dirpath)
+        print_message(message='Directory created: ' + dirpath, console=False)
+    except FileExistsError as e:
+            print_message(message='Directory exists', console=False)
+
+# Create a file
+# For overwriting a file, set `overwrite=True`
+def create_file(filename, overwrite=False):
+    try:
+        with open(filename, 'a') as f:
+            if overwrite is True:
+                f.truncate(0)
+            else:
+                u.print_message(message='File initialized: ' + filename, console=False)
+    except {IOError, FileNotFoundError} as e:
+        u.print_message(message='Error initializing file: ' + filename, console=False)
